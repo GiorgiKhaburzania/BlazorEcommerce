@@ -1,0 +1,117 @@
+.navbar-toggler {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-btn{
+    border: none;
+    background-color: inherit;
+    color: white;
+    margin-left: auto;
+}
+
+.nav-main-title {
+    display: flex;
+    padding: 0.7rem 1.2rem;
+    color: #fff;
+    border-bottom: solid 1px #fff;
+}
+
+.top-row {
+    height: 3.5rem;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.navbar-brand {
+    font-size: 1.1rem;
+}
+
+.oi {
+    width: 2rem;
+    font-size: 1.1rem;
+    vertical-align: text-top;
+    top: -2px;
+}
+
+.nav-container{
+    display: flex;
+    flex-direction: column;
+    padding-block: 1rem;
+}
+.nav-multiple{
+    display: flex;
+    flex-direction: column;
+    transition: 300ms;
+}
+.nav-multiple.active {
+    border-bottom: solid 1px #fff;
+}
+
+.nav-multiple.active .nav-title-wrapper .arrow {
+    transform: rotate(180deg);
+}
+
+
+.nav-content{
+    display: flex;
+    flex-direction: column;
+    margin-left: 3rem;
+}
+
+.nav-item {
+    color: #fff !important;
+    user-select: none;
+}
+    .nav-item ::deep a, .nav-title-wrapper {
+        cursor: pointer;
+        font-size: 0.9rem;
+        padding: 0.7rem 1rem;
+        border-radius: 5px;
+        margin: 0.3rem 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #fff;
+        transition: 300ms;
+    }
+        .nav-item ::deep a:hover, .nav-title-wrapper:hover {
+            background-color: #adb5bd73
+        }
+    
+    .nav-item p, .nav-title-wrapper p {
+        margin-bottom: 0 !important;
+        user-select: none;
+    }
+
+.nav-title-wrapper .arrow {
+    margin-left: auto;
+    width: max-content;
+    transition: 300ms;
+}
+
+.desktop {
+    display: none;
+}
+
+.mobile {
+    display: block;
+}
+    
+
+@media (min-width: 641px) {
+    .navbar-toggler {
+        display: none;
+    }
+
+    .collapse {
+        /* Never collapse the sidebar for wide screens */
+        display: block;
+    }
+
+    .desktop {
+        display: block;
+    }
+
+    .mobile {
+        display: none;
+    }
+}

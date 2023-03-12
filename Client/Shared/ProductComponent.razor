@@ -1,0 +1,44 @@
+﻿@inject IProductService _product
+@inject NavigationManager _nav;
+
+@if (_product.productList == null)
+{
+    <LoadingSpinner></LoadingSpinner>
+ }
+else if (_product.productList.Count == 0)
+{
+    <h2>No Products</h2>
+}else{
+    <ul class="list-unstyled product-container">
+        @foreach (var product in _product.productList)
+        {
+            <li class="my-3 p-5 d-flex flex-column border-2 item" @onclick="() => {onProductClick(product.Id);}">
+                <div class="img-div">
+                    <img src="@product.ImageUrl" alt="@product.Title" />
+                </div>
+                <h4>@product.Title</h4>
+                <p>@(product.Description.Length > 30 ? product.Description.Substring(0, 30) + "..." : product.Description)</p>
+                <p class="price"><b>@product.Price</b></p>
+            </li>
+        }
+    </ul>
+}
+
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAll();
+    }
+
+    public async Task GetAll()
+    {
+        await _product.GetAll();
+    }
+
+    public void onProductClick(int id)
+    {
+        _nav.NavigateTo($"/ProductDetails/{id}");
+    }
+}

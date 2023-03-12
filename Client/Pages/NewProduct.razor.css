@@ -1,0 +1,59 @@
+﻿h1{
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 40rem;
+    margin-inline: auto;
+    box-shadow: 0 0 15px #ccc;
+    border-radius: 15px;
+    padding: 5rem 2rem;
+    margin-bottom: 5rem;
+}
+
+.input-div{
+    display: flex;
+    flex-direction: column;
+}
+
+label{
+    color: rebeccapurple;
+    margin-bottom: .3rem;
+    font-weight: 500;
+}
+
+input, select, textarea{
+    border: none;
+    border-radius: 5px;
+    box-shadow: inset 0 0 5px #ccc;
+    padding: .5rem .7rem;
+    font-size: 18px;
+    outline: none;
+}
+
+textarea{
+    resize: none;
+}
+
+.save-btn{
+    color: white;
+    background-color: rebeccapurple;
+    padding: .7rem 2rem;
+    border-radius: 5px;
+    font-size: 20px;
+    border: solid 2px rebeccapurple;
+    max-width: 20rem;
+    width: 100%;
+    margin-inline: auto;
+    display: block;
+    transition: 300ms;
+}
+
+.save-btn:hover{
+    color: rebeccapurple;
+    background-color: white;
+}

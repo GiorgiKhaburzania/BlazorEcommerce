@@ -1,0 +1,49 @@
+﻿@page "/New"
+@inject ICategoryService _category;
+@inject IProductService _product;
+@inject NavigationManager _nav;
+
+<h1>Add New Product</h1>
+
+<form>
+    <div class="input-div">
+        <label>Product Title</label>
+        <input type="text" @bind="product.Title" />
+    </div>
+    <div class="input-div">
+        <label>Product Image Url</label>
+        <input type="text" @bind="product.ImageUrl" />
+    </div>
+    <div class="input-div">
+        <label>Product Price</label>
+        <input type="number" @bind="product.Price" />
+    </div>
+    <div class="input-div">
+        <label>Product Description</label>
+        <textarea type="text" @bind="product.Description" />
+    </div>
+    <div class="input-div">
+        <label>Product Category</label>
+        <select type="text" @bind="product.CategoryId">
+            @foreach (var category in _category.CategoryList)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+
+        </select>
+    </div>
+    <button class="save-btn" type="button" @onclick="() => OnSave()">Save</button>
+</form>
+
+@code {
+    private Product product = new Product();
+
+    public async Task OnSave()
+    {
+        if (product.Title != null && product.Price != null && product.ImageUrl != null && product.Description != null && product.CategoryId != null)
+        {
+            await _product.AddProduct(product);
+            _nav.NavigateTo("Products");
+        }
+    }
+}

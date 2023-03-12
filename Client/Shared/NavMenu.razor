@@ -1,0 +1,80 @@
+﻿@inject ICategoryService _category;
+
+<div class="nav-main-title">
+    <a class="" href="">BlazorEcommerce</a>
+    <button title="Navigation menu" class="nav-btn mobile" @onclick="ToggleNavMenu">
+        <i class="oi oi-menu"></i>
+    </button>
+</div>
+
+<div class="@NavMenuCssClass">
+    <nav class="nav-container">
+        <div class="nav-item">
+            <NavLink href="Products" @onclick="() => {CloseNavState();}">
+                <i class="oi oi-home" aria-hidden="true"></i> <p>Home</p>
+            </NavLink>
+        </div>
+        
+        <div class="nav-multiple @(navState == 1 ? "active" : "")">
+            <div class="nav-title-wrapper" @onclick="() => {ToggleNavState(1);}">
+                <i class="oi oi-cart"></i>
+                <p>Categories</p>
+                <i class="oi oi-chevron-bottom arrow"></i>
+            </div>
+            @if (navState == 1)
+            {
+                <div class="nav-content" id="1">
+                    @foreach(var item in _category.CategoryList)
+                    {
+                        <div class="nav-item" @onclick="() => {CloseNavState();}">
+                            <NavLink href="@(item.Url + "/" + item.Id)">
+                                <p>@item.Name</p>
+                            </NavLink>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="nav-item">
+            <NavLink href="New" @onclick="() => {CloseNavState();}">
+                <i class="oi oi-plus"></i><p>Add new Product</p>
+            </NavLink>
+        </div>
+    </nav>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+    private int navState = 0;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await _category.GetAll();
+    }
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    private void ToggleNavState(int id)
+    {
+        if (navState == id)
+        {
+            navState = 0;
+        }
+        else
+        {
+            navState = id;
+        }
+    }
+
+    private void CloseNavState()
+    {
+        navState = 0;
+        ToggleNavMenu();
+    }
+}

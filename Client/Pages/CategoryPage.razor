@@ -1,0 +1,83 @@
+﻿@inject ICategoryService _category;
+@inject NavigationManager _nav;
+
+@page "/{CategoryUrl}/{id:int}";
+
+
+@if (message == null && Category == null)
+{
+    <LoadingSpinner></LoadingSpinner>
+}
+else if (message != null)
+{
+    <PageTitle>Not Found</PageTitle>
+    <NotFound message="message"></NotFound>
+}
+else if(Category != null)
+{
+    <h1 class="main-title">@Category.Name</h1>
+
+    <div class="category-content-container">
+        @foreach(var item in Category.Products)
+        {
+            <div class="item" @onclick="() => {OnItemClick(item.Id);}">
+                <h3>@item.Title</h3>
+                <div class="wrapper">
+                    <div class="img-div">
+                        <img src="@item.ImageUrl" alt="@item.Title" />
+                    </div>
+                    <div class="item-content">
+                        <p class="description">@item.Description</p>
+                        <h4>$@item.Price</h4>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public string CategoryUrl { get; set; }
+
+    [Parameter]
+    public int id { get; set; }
+
+    public Category? Category { get; set; }
+    public string? message { get; set; } 
+
+    protected override async Task OnInitializedAsync()
+    {
+        _nav.LocationChanged += RouteChange;
+
+        await GetCategory(id);
+    }
+
+    public async Task GetCategory(int id)
+    {
+        var result = await _category.GetById(id);
+        if(result != null && result.Data != null)
+        {
+            Category = result.Data;
+        }
+        else
+        {
+            message = result.Message;
+        }
+    }
+
+    public async void RouteChange(object sender, LocationChangedEventArgs e)
+    {
+        await base.InvokeAsync(async () =>
+        {
+            await GetCategory(id);
+            StateHasChanged();
+        });
+    }
+
+    public void OnItemClick(int id)
+    {
+        _nav.NavigateTo($"ProductDetails/{id}");
+    }
+}

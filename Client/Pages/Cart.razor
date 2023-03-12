@@ -1,0 +1,69 @@
+﻿@inject ICartService _cart;
+
+@page "/Cart";
+
+
+<h1>Cart</h1>
+
+<div class="main-wrapper">
+    @if (_cart.Cart == null)
+    {
+        <LoadingSpinner></LoadingSpinner>
+    }
+    else if (_cart.Cart != null && _cart.Cart.Products.Count == 0)
+    {
+        <h2>No items in thhe Cart</h2>
+    }
+    else if (_cart.Cart != null)
+    {
+        <div class="product-container">
+            @foreach (var item in _cart.Cart.Products)
+            {
+                <div class="cart-item">
+                    <div class="img-div desktop">
+                        <img src="@item.ImageUrl" alt="@item.Title" />
+                    </div>
+                    <div class="cart-content">
+                        <h3>@item.Title</h3>
+                        <div>
+                            <div class="img-div mobile">
+                                <img src="@item.ImageUrl" alt="@item.Title" />
+                            </div>
+                            <p>@item.Description</p>
+                        </div>
+                    </div>
+                    <div class="price-actions">
+                        <button class="remove btn btn-danger d-flex pb-2" @onclick="() => Remove(item.Id)"><i class="oi oi-delete"></i></button>
+                        <p class="price">@item.Price</p>
+                    </div>
+                </div>
+            }
+            <div class="ms-auto d-flex flex-column align-items-end">
+                <h4>Total Item(s) <span style="color: rebeccapurple; font-weight: 600; font-size: larger;">@_cart.CartCount</span></h4>
+                <h3>$@_cart.Cart.TotalPrice</h3>
+            </div>
+        </div>
+        <div class="details-container">
+            <h2>Total Price</h2>
+            <h3>$@_cart.Cart.TotalPrice</h3>
+            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+        </div>
+    }
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCart();
+    }
+
+    public async Task GetCart()
+    {
+        await _cart.GetCart(1);
+    }
+
+    public async Task Remove(int id)
+    {
+        await _cart.RemoveFromCart(1, id);
+    }
+}

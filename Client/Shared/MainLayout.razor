@@ -1,0 +1,36 @@
+﻿@inherits LayoutComponentBase
+@inject ICartService _cart;
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <a class="d-flex align-items-center gap-3 p-2 ps-3 rounded-pill" style="background-color: rebeccapurple; color: #fff !important;" href="Cart">
+                <i class="oi oi-cart"></i>
+                @if(_cart.Cart != null)
+                {
+                    <p class="mb-0">Cart <span style="text-align: center; background-color: #fff; color: rebeccapurple; padding: 0.2rem; border-radius: 50px; height: 30px; width: 30px; display: inline-block; margin-left: 0.5rem;">@_cart.CartCount</span> </p>
+                }
+            </a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCartCount();
+    }
+
+    public async Task GetCartCount()
+    {
+        await _cart.GetCart(1);
+    }
+}

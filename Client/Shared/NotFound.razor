@@ -1,0 +1,16 @@
+﻿@inject NavigationManager _nav;
+
+<div class="d-flex flex-column align-items-center">
+    <h2 class="text-center mt-5">@message</h2>
+    <button class="btn btn-primary fs-3 mt-5 py-3 px-5" @onclick="goBack">Go to Homepage</button>
+</div>
+
+@code {
+    [Parameter]
+    public string message { get; set; }
+
+    private void goBack()
+    {
+        _nav.NavigateTo("/Products");
+    }
+}

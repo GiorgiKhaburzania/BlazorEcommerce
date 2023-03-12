@@ -1,0 +1,134 @@
+﻿@inject IProductService _product;
+@inject ICartService _cart;
+@inject ICategoryService _category;
+@inject NavigationManager _nav;
+
+@page "/ProductDetails/{id:int}"
+
+@if (product == null && message == null)
+{
+    <LoadingSpinner></LoadingSpinner>
+}
+else if (message != null && product == null)
+{
+    <NotFound message="message"></NotFound>
+}
+else if (product != null)
+{
+    <h1 class="main-title">@product.Title Details</h1>
+
+    <div class="main-wrapper">
+        <div class="gallery">
+            <div class="images">
+                <img src="@product.ImageUrl" alt="@product.Title" />
+                <img src="@product.ImageUrl" alt="@product.Title" />
+                <img src="@product.ImageUrl" alt="@product.Title" />
+                <img src="@product.ImageUrl" alt="@product.Title" />
+                <img src="@product.ImageUrl" alt="@product.Title" />
+                <img src="@product.ImageUrl" alt="@product.Title" />
+            </div>
+            <div class="img-div">
+                <img src="@product.ImageUrl" alt="@product.Title" />
+            </div>
+        </div>
+        <div class="detail-content">
+            <p>@product.Description</p>
+        </div>
+        <div class="price-div">
+            <h4>@product.Price$</h4>
+
+            <button class="cart-btn cart1" @onclick="AddToCart"><i class="oi oi-cart"></i> <p>Add to Cart</p></button>
+
+            <button class="cart-btn cart2" @onclick="AddToCart"><i class="oi oi-cart"></i> <p>Add to Cart</p></button>
+
+            <button class="cart-btn cart3" @onclick="AddToCart"><i class="oi oi-cart"></i> <p>Add to Cart</p></button>
+
+            <button class="edit-btn" @onclick="() => ToggleEditForm()">Edit Item</button>
+            <button class="delete-btn" @onclick="() => onDelete()">Delete Item</button>
+        </div>
+    </div>
+
+    
+        @if (editState)
+        {
+        <div class="edit-wrapper">
+            <div class="backdrop" @onclick="() => ToggleEditForm()"></div>
+            <form>
+                <div class="input-div">
+                    <label>Product Title</label>
+                    <input type="text" @bind="product.Title" />
+                </div>
+                <div class="input-div">
+                    <label>Product Image Url</label>
+                    <input type="text" @bind="product.ImageUrl" />
+                </div>
+                <div class="input-div">
+                    <label>Product Price</label>
+                    <input type="number" @bind="product.Price" />
+                </div>
+                <div class="input-div">
+                    <label>Product Description</label>
+                    <textarea type="text" @bind="product.Description" />
+                </div>
+                <div class="input-div">
+                    <label>Product Category</label>
+                    <select type="text" @bind="product.CategoryId">
+                        @foreach(var category in _category.CategoryList)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                        
+                    </select>
+                </div>
+                <button class="save-btn btn-1" type="button" @onclick="() => OnSave()">Save</button>
+            </form>
+        </div>
+        }
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Product? product;
+    private string? message { get; set; }
+    private bool editState = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetProduct(Id);
+    }
+
+    private async Task GetProduct(int id)
+    {
+        var result = await _product.GetById(id);
+        if(result.Data != null)
+        {
+            product = result.Data;
+        }else
+        {
+            message = result.Message;
+        }
+    }
+
+    private void ToggleEditForm()
+    {
+        this.editState = !this.editState;
+    }
+
+    public async Task AddToCart()
+    {
+        await _cart.AddToCart(1, Id);
+    }
+
+    public async Task OnSave()
+    {
+        await _product.EditProduct(product!);
+        editState = false;
+    }
+
+    public async Task onDelete()
+    {
+        await _product.DeleteProduct(product!.Id);
+        _nav.NavigateTo("Products");
+    }
+}
